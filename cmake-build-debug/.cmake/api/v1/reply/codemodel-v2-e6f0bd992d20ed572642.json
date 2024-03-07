@@ -39,7 +39,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "solitario::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-solitario-Debug-6a8294379503be758010.json",
+					"jsonFile" : "target-solitario-Debug-7b77ad0c6de61a719461.json",
 					"name" : "solitario",
 					"projectIndex" : 0
 				}
@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "C:/Users/branp/CLionProjects/solitario/cmake-build-debug",
-		"source" : "C:/Users/branp/CLionProjects/solitario"
+		"build" : "C:/Users/branp/Desktop/Carpetas/programacion/para proyectos/Proyecto 1 EDD/solitario/cmake-build-debug",
+		"source" : "C:/Users/branp/Desktop/Carpetas/programacion/para proyectos/Proyecto 1 EDD/solitario"
 	},
 	"version" : 
 	{

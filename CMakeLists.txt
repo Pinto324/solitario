@@ -8,4 +8,6 @@ add_executable(solitario main.cpp
         Carta.h
         Manejador.cpp
         Manejador.h
+        NodoCarta.cpp
+        NodoCarta.h
 )
