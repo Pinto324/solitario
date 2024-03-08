@@ -29,6 +29,20 @@ class Manejador {
     void ImprimirPantalla();
 
     void Jugar(int Opcion);
+
+    bool movimientoLegal();
+
+    NodoCarta *obtenerNodo(int numero);
+
+    std::string movimientoLegal(int inicio, int final);
+
+    void EliminarNodoDoble(NodoCarta *Eliminado);
+
+    void limpiarPantalla();
+
+    NodoCarta RecorrerNodoU(NodoCarta Centinela);
+
+    NodoCarta GuardadorDeCambio(int numero);
 };
 
 

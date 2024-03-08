@@ -94,6 +94,7 @@ void Manejador::IniciarJuego(){
         std::cout << "Que desea hacer?";
         std::cin >> opcion;
         Jugar(opcion);
+        limpiarPantalla();
     }
 }
 //cuarto metodo principal
@@ -115,9 +116,20 @@ void Manejador::Jugar(int Opcion){
             }
             break;
         case 2:
-            int casilla;
+            int casillaI, casillaF;
             std::cout << "Escriba el numero de casilla donde se encuentra la carta";
-            std::cin >> casilla;
+            std::cin >> casillaI;
+            std::cout << "Escriba el numero de casilla donde quiere mover la carta";
+            std::cin >> casillaF;
+            if(casillaI < 13 && casillaI > 0 && casillaF < 13 && casillaF > 0){
+                if(casillaI==casillaF){
+                    std::cout << "No puedes mover una carta al mismo lugar"<<std::endl;
+                }else{
+                    std::cout <<movimientoLegal(casillaI,casillaF)<<std::endl;
+                }
+            }else{
+                std::cout << "escogiste una casilla invalida"<<std::endl;
+            }
             break;
         case 3:
             break;
@@ -175,6 +187,107 @@ void Manejador::ImprimirPantalla(){
     }
     std::cout << " 6        7       8     9      10     11     12" << std::endl;
 }
+//metodo de apoyo del cuarto metodo principal encargado de verificar si se puede asignar una carta al punto puesto
+std::string Manejador::movimientoLegal(int inicio, int final){
+    NodoCarta *Inicio = obtenerNodo(inicio);
+    NodoCarta *Final = obtenerNodo(final);
+    switch (final) {
+        case 1:
+            return "No puedes poner devuelta una carta en la baraja.";
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+            //condiciones para poder poner la carta en el nuevo lugar
+            if(Inicio->getCartaApuntada()->getValor()==(Final->getCartaApuntada()->getValor()+1)&&Inicio->getCartaApuntada()->getPrefijo()==Final->getCartaApuntada()->getPrefijo()){
+                AgregarNodoDoble(obtenerNodo(final),obtenerNodo(inicio));
+                EliminarNodoDoble(obtenerNodo(inicio));
+                return "Movimiento completado.";
+            }else{
+                return "Movimiento invalido, haber estudiado";
+            }
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+        case 11:
+        case 12:
+            //condiciones para poder poner la carta en el nuevo lugar
+            if(Inicio->getCartaApuntada()->getValor()==(Final->getCartaApuntada()->getValor()-1)&&Inicio->getCartaApuntada()->getColor()!=Final->getCartaApuntada()->getColor()){
+                AgregarNodoDoble(obtenerNodo(final),Inicio);
+                GuardadorDeCambio(final) = *this->obtenerNodo(final);
+                EliminarNodoDoble(obtenerNodo(inicio));
+                return "Movimiento completado.";
+            }else{
+                return "Movimiento invalido, haber estudiado";
+            }
+        default:
+            return "Alguna casilla marcada no existe, revise el tablero bien.";
+    }
+}
+//metodo de apoyo del metodo de apoyo para obtener el nodo al cual quiere acceder el usuario
+NodoCarta* Manejador::obtenerNodo(int numero){
+    switch (numero) {
+        case 1:
+            return &Cola1;
+        case 2:
+            return RecorrerNodo(&Ganar1);
+        case 3:
+            return RecorrerNodo(&Ganar2);
+        case 4:
+            return RecorrerNodo(&Ganar3);
+        case 5:
+            return RecorrerNodo(&Ganar4);
+        case 6:
+            return RecorrerNodo(&Col1);
+        case 7:
+            return RecorrerNodo(&Col2);
+        case 8:
+            return RecorrerNodo(&Col3);
+        case 9:
+            return RecorrerNodo(&Col4);
+        case 10:
+            return RecorrerNodo(&Col5);
+        case 11:
+            return RecorrerNodo(&Col6);
+        case 12:
+            return RecorrerNodo(&Col7);
+        default:
+            break;
+    }
+}
+//metodo de apoyo del metodo de apoyo para obtener el nodo al cual quiere acceder el usuario
+NodoCarta Manejador::GuardadorDeCambio(int numero){
+    switch (numero) {
+        case 1:
+            return Cola1;
+        case 2:
+            return RecorrerNodoU(Ganar1);
+        case 3:
+            return RecorrerNodoU(Ganar2);
+        case 4:
+            return RecorrerNodoU(Ganar3);
+        case 5:
+            return RecorrerNodoU(Ganar4);
+        case 6:
+            return RecorrerNodoU(Col1);
+        case 7:
+            return RecorrerNodoU(Col2);
+        case 8:
+            return RecorrerNodoU(Col3);
+        case 9:
+            return RecorrerNodoU(Col4);
+        case 10:
+            return RecorrerNodoU(Col5);
+        case 11:
+            return RecorrerNodoU(Col6);
+        case 12:
+            return RecorrerNodoU(Col7);
+        default:
+            break;
+    }
+}
 //metodo de apoyo del segundo metodo principal encargado de Asignar cola
 void Manejador::AsignarCola(NodoCarta* Centinela, Carta* tab){
     for (int i = 0; i < 24; ++i) {
@@ -221,10 +334,25 @@ void Manejador::AgregarNodoDoble(NodoCarta* temp, NodoCarta* Nuevo){
 void Manejador::AgregarNodo(NodoCarta* temp, NodoCarta* Nuevo){
     temp->setNodoSig(Nuevo);
 }
+void Manejador::EliminarNodoDoble(NodoCarta* Eliminado){
+    if(Eliminado->getNodoSig()== nullptr){
+        NodoCarta *Borrar =Eliminado->getNodoAnterior();
+        Eliminado->setNodoAnterior(nullptr);
+        Borrar->setNodoSig(nullptr);
+    }
+}
 NodoCarta* Manejador::RecorrerNodo(NodoCarta* Centinela){
 
     while (Centinela->getNodoSig() != nullptr) {
         Centinela = Centinela->getNodoSig();
+    }
+
+    return Centinela;
+}
+NodoCarta Manejador::RecorrerNodoU(NodoCarta Centinela){
+
+    while (Centinela.getNodoSig() != nullptr) {
+        Centinela = *Centinela.getNodoSig();
     }
 
     return Centinela;
@@ -240,4 +368,12 @@ void Manejador::RecorrerNodoImprimiendo(NodoCarta* Centinela){
     }
     Carta *a = Centinela->getCartaApuntada();
     std::cout << "Cartas en fila[" << i << "]: " << a->getValor()<< " | " << a->getPrefijo() << std::endl;
+}
+//metodo para limpiar pantalla
+void Manejador::limpiarPantalla() {
+#ifdef _WIN32
+    system("cls"); // Para sistemas Windows
+#else
+    system("clear"); // Para sistemas Unix (Linux/MacOS)
+#endif
 }
