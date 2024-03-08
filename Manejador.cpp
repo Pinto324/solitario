@@ -115,6 +115,9 @@ void Manejador::Jugar(int Opcion){
             }
             break;
         case 2:
+            int casilla;
+            std::cout << "Escriba el numero de casilla donde se encuentra la carta";
+            std::cin >> casilla;
             break;
         case 3:
             break;
