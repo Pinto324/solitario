@@ -1,3 +1,3 @@
-C:/Users/branp/Desktop/Carpetas/programacion/para proyectos/Proyecto 1 EDD/solitario/cmake-build-debug/CMakeFiles/solitario.dir
-C:/Users/branp/Desktop/Carpetas/programacion/para proyectos/Proyecto 1 EDD/solitario/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/branp/Desktop/Carpetas/programacion/para proyectos/Proyecto 1 EDD/solitario/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/Users/branp/CLionProjects/solitario/cmake-build-debug/CMakeFiles/solitario.dir
+C:/Users/branp/CLionProjects/solitario/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/branp/CLionProjects/solitario/cmake-build-debug/CMakeFiles/rebuild_cache.dir

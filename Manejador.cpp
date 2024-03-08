@@ -100,12 +100,12 @@ void Manejador::IniciarJuego(){
 void Manejador::Jugar(int Opcion){
     switch (Opcion) {
         case 1:
-            if(Cola1.getCartaApuntada() == nullptr){
+            if(Cola1.getNodoSig() == nullptr){
                 Cola1 = Cola2;
                 Cola2 = *new NodoCarta();
             }else{
                 if(Cola2.getCartaApuntada() == nullptr){
-                    Cola2 = Cola1;
+                    Cola2.setCartaApuntada(Cola1.getCartaApuntada());
                 }else{
                     NodoCarta *Nuevo = new NodoCarta();;
                     Nuevo->setCartaApuntada(Cola1.getCartaApuntada());

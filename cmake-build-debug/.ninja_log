@@ -1,0 +1,10 @@
+# ninja log v5
+29	1405	7315764052619154	CMakeFiles/solitario.dir/NodoCarta.cpp.obj	2a42120a31599ff6
+0	1858	7315764057167855	CMakeFiles/solitario.dir/Carta.cpp.obj	1b3b5554702163ba
+18	1938	7315764057952700	CMakeFiles/solitario.dir/main.cpp.obj	273f0c9491cf9b5a
+23	2110	7315764059676043	CMakeFiles/solitario.dir/Manejador.cpp.obj	bd66c6cfe43ddb5
+2110	2548	7315764063974834	solitario.exe	70cc069eb7978cb2
+3	878	7315771146623383	CMakeFiles/solitario.dir/Manejador.cpp.obj	bd66c6cfe43ddb5
+879	1152	7315771149286990	solitario.exe	70cc069eb7978cb2
+3	759	7315773816176370	CMakeFiles/solitario.dir/Manejador.cpp.obj	bd66c6cfe43ddb5
+760	1048	7315773818970507	solitario.exe	70cc069eb7978cb2

@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "C:/Users/branp/Desktop/Carpetas/programacion/para proyectos/Proyecto 1 EDD/solitario/cmake-build-debug",
-		"source" : "C:/Users/branp/Desktop/Carpetas/programacion/para proyectos/Proyecto 1 EDD/solitario"
+		"build" : "C:/Users/branp/CLionProjects/solitario/cmake-build-debug",
+		"source" : "C:/Users/branp/CLionProjects/solitario"
 	},
 	"version" : 
 	{
