@@ -31,9 +31,14 @@ bool Carta::getOcultar() const {
 std::string Carta::getDatos() const{
     std::ostringstream ss;
     if(Ocultar){
-        ss <<"[]";
+        ss <<"  []  ";
     }else{
-        ss << Valor <<Prefijo << Color;
+        if(Valor>9){
+            ss <<" "<<Valor <<Prefijo << Color;
+        }else{
+            ss<<" "<< Valor <<Prefijo << Color<<" ";
+        }
+
     }
     return ss.str();
 }

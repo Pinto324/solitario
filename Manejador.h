@@ -32,8 +32,8 @@ class Manejador {
 
     bool movimientoLegal();
 
-    NodoCarta *obtenerNodo(int numero);
-
+    NodoCarta * obtenerNodo(int numero);
+    Carta * obtenerCartaNodo(int numero);
     std::string movimientoLegal(int inicio, int final);
 
     void EliminarNodoDoble(NodoCarta *Eliminado);
@@ -43,6 +43,8 @@ class Manejador {
     NodoCarta RecorrerNodoU(NodoCarta Centinela);
 
     NodoCarta GuardadorDeCambio(int numero);
+
+    bool ComprobarVictory();
 };
 
 

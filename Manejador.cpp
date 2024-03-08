@@ -94,7 +94,12 @@ void Manejador::IniciarJuego(){
         std::cout << "Que desea hacer?";
         std::cin >> opcion;
         Jugar(opcion);
-        limpiarPantalla();
+        Sigue = ComprobarVictory();
+    }
+    if(!ComprobarVictory()){
+        std::cout << "Felicidades, has ganado el solitario!!";
+    }else{
+        std::cout << "Casi lo consigues! suerte a la proxima";
     }
 }
 //cuarto metodo principal
@@ -103,10 +108,12 @@ void Manejador::Jugar(int Opcion){
         case 1:
             if(Cola1.getNodoSig() == nullptr){
                 Cola1 = Cola2;
+                Cola1.getCartaApuntada()->setOcultar(false);
                 Cola2 = *new NodoCarta();
             }else{
                 if(Cola2.getCartaApuntada() == nullptr){
                     Cola2.setCartaApuntada(Cola1.getCartaApuntada());
+                    Cola2.getCartaApuntada()->setOcultar(true);
                 }else{
                     NodoCarta *Nuevo = new NodoCarta();;
                     Nuevo->setCartaApuntada(Cola1.getCartaApuntada());
@@ -138,26 +145,42 @@ void Manejador::Jugar(int Opcion){
             break;
     }
 }
+bool Manejador::ComprobarVictory(){
+    NodoCarta* nodo1 = RecorrerNodo(&Ganar1);
+    NodoCarta* nodo2 = RecorrerNodo(&Ganar2);
+    NodoCarta* nodo3 = RecorrerNodo(&Ganar3);
+    NodoCarta* nodo4 = RecorrerNodo(&Ganar4);
+
+    if (nodo1->getCartaApuntada() != nullptr  && nodo2->getCartaApuntada() != nullptr && nodo3->getCartaApuntada() != nullptr && nodo4->getCartaApuntada() != nullptr) {
+        if (nodo1->getCartaApuntada()->getValor() == 13 &&
+            nodo2->getCartaApuntada()->getValor() == 13 &&
+            nodo3->getCartaApuntada()->getValor() == 13 &&
+            nodo4->getCartaApuntada()->getValor() == 13) {
+            return false;
+        }
+    }
+    return true;
+}
 //metodo auxiliar del tercer principal para imprimir pantalla
 void Manejador::ImprimirPantalla(){
-    std::cout << "   1                      2     3     4     5" << std::endl;
+    std::cout << "     1                          2      3      4     5" << std::endl;
     NodoCarta *Mc1 = &Col1, *Mc2 = &Col2, *Mc3 = &Col3, *Mc4 = &Col4, *Mc5 = &Col5, *Mc6 = &Col6, *Mc7 = &Col7;
     bool Sigue = true;
 
-    std::cout <<Cola1.getCartaApuntada()->getDatos()<<" | |                "
-            << (RecorrerNodo(&Ganar1)->getCartaApuntada() ? RecorrerNodo(&Ganar1)->getCartaApuntada()->getDatos() : "| |") << "   "
-            << (RecorrerNodo(&Ganar2)->getCartaApuntada() ? RecorrerNodo(&Ganar2)->getCartaApuntada()->getDatos() : "| |") << "   "
-            << (RecorrerNodo(&Ganar3)->getCartaApuntada() ? RecorrerNodo(&Ganar3)->getCartaApuntada()->getDatos() : "| |") << "   "
-            << (RecorrerNodo(&Ganar4)->getCartaApuntada() ? RecorrerNodo(&Ganar4)->getCartaApuntada()->getDatos() : "| |") << std::endl;
+    std::cout <<Cola1.getCartaApuntada()->getDatos()<<(Cola2.getCartaApuntada() ? Cola2.getCartaApuntada()->getDatos() : " | | ")<<"                  "
+            << (RecorrerNodo(&Ganar1)->getCartaApuntada() ? RecorrerNodo(&Ganar1)->getCartaApuntada()->getDatos() : " | | ") << "   "
+            << (RecorrerNodo(&Ganar2)->getCartaApuntada() ? RecorrerNodo(&Ganar2)->getCartaApuntada()->getDatos() : " | | ") << "   "
+            << (RecorrerNodo(&Ganar3)->getCartaApuntada() ? RecorrerNodo(&Ganar3)->getCartaApuntada()->getDatos() : " | | ") << "   "
+            << (RecorrerNodo(&Ganar4)->getCartaApuntada() ? RecorrerNodo(&Ganar4)->getCartaApuntada()->getDatos() : " | | ") << std::endl;
     std::cout<<std::endl;
     while(Sigue){
-        std::cout << (Mc1 && Mc1->getCartaApuntada() ? Mc1->getCartaApuntada()->getDatos() : "  ") << "     "
-                  << (Mc2 && Mc2->getCartaApuntada() ? Mc2->getCartaApuntada()->getDatos() : "  ") << "     "
-                  << (Mc3 && Mc3->getCartaApuntada() ? Mc3->getCartaApuntada()->getDatos() : "  ") << "     "
-                  << (Mc4 && Mc4->getCartaApuntada() ? Mc4->getCartaApuntada()->getDatos() : "  ") << "     "
-                  << (Mc5 && Mc5->getCartaApuntada() ? Mc5->getCartaApuntada()->getDatos() : "  ") << "     "
-                  << (Mc6 && Mc6->getCartaApuntada() ? Mc6->getCartaApuntada()->getDatos() : "  ") << "     "
-                  << (Mc7 && Mc7->getCartaApuntada() ? Mc7->getCartaApuntada()->getDatos() : "  ") << std::endl;
+        std::cout << (Mc1 && Mc1->getCartaApuntada() ? Mc1->getCartaApuntada()->getDatos() : "      ") << "     "
+                  << (Mc2 && Mc2->getCartaApuntada() ? Mc2->getCartaApuntada()->getDatos() : "      ") << "     "
+                  << (Mc3 && Mc3->getCartaApuntada() ? Mc3->getCartaApuntada()->getDatos() : "      ") << "     "
+                  << (Mc4 && Mc4->getCartaApuntada() ? Mc4->getCartaApuntada()->getDatos() : "      ") << "     "
+                  << (Mc5 && Mc5->getCartaApuntada() ? Mc5->getCartaApuntada()->getDatos() : "      ") << "     "
+                  << (Mc6 && Mc6->getCartaApuntada() ? Mc6->getCartaApuntada()->getDatos() : "      ") << "     "
+                  << (Mc7 && Mc7->getCartaApuntada() ? Mc7->getCartaApuntada()->getDatos() : "      ") << std::endl;
 
         if(Mc1 == nullptr && Mc2 == nullptr && Mc3 == nullptr&&Mc4 == nullptr&&Mc5 == nullptr&&Mc6 == nullptr&& Mc7 == nullptr){
             Sigue = false;
@@ -185,12 +208,13 @@ void Manejador::ImprimirPantalla(){
             }
         }
     }
-    std::cout << " 6        7       8     9      10     11     12" << std::endl;
+    std::cout << "  6           7         8         9          10         11         12" << std::endl;
 }
 //metodo de apoyo del cuarto metodo principal encargado de verificar si se puede asignar una carta al punto puesto
 std::string Manejador::movimientoLegal(int inicio, int final){
     NodoCarta *Inicio = obtenerNodo(inicio);
     NodoCarta *Final = obtenerNodo(final);
+    Carta * CartaN = new Carta();
     switch (final) {
         case 1:
             return "No puedes poner devuelta una carta en la baraja.";
@@ -199,12 +223,24 @@ std::string Manejador::movimientoLegal(int inicio, int final){
         case 4:
         case 5:
             //condiciones para poder poner la carta en el nuevo lugar
-            if(Inicio->getCartaApuntada()->getValor()==(Final->getCartaApuntada()->getValor()+1)&&Inicio->getCartaApuntada()->getPrefijo()==Final->getCartaApuntada()->getPrefijo()){
-                AgregarNodoDoble(obtenerNodo(final),obtenerNodo(inicio));
-                EliminarNodoDoble(obtenerNodo(inicio));
-                return "Movimiento completado.";
+            if(Final->getCartaApuntada()== nullptr){
+                if (Inicio->getCartaApuntada()->getValor() == 1) {
+                    CartaN = obtenerCartaNodo(inicio);
+                    Final->setCartaApuntada(CartaN);
+                    return "Movimiento completado.";
+                } else {
+                    return "Movimiento invalido, tienes que iniciar con un A para meter cartas aqui.";
+                }
             }else{
-                return "Movimiento invalido, haber estudiado";
+                if(Inicio->getCartaApuntada()->getValor()==(Final->getCartaApuntada()->getValor()+1)&&Inicio->getCartaApuntada()->getPrefijo()==Final->getCartaApuntada()->getPrefijo()){
+                    CartaN = obtenerCartaNodo(inicio);
+                    NodoCarta* nuevo = new NodoCarta();
+                    nuevo->setCartaApuntada(CartaN);
+                    AgregarNodoDoble(obtenerNodo(final),nuevo);
+                    return "Movimiento completado.";
+                }else{
+                    return "Movimiento invalido, haber estudiado";
+                }
             }
         case 6:
         case 7:
@@ -214,17 +250,99 @@ std::string Manejador::movimientoLegal(int inicio, int final){
         case 11:
         case 12:
             //condiciones para poder poner la carta en el nuevo lugar
-            if(Inicio->getCartaApuntada()->getValor()==(Final->getCartaApuntada()->getValor()-1)&&Inicio->getCartaApuntada()->getColor()!=Final->getCartaApuntada()->getColor()){
-                AgregarNodoDoble(obtenerNodo(final),Inicio);
-                GuardadorDeCambio(final) = *this->obtenerNodo(final);
-                EliminarNodoDoble(obtenerNodo(inicio));
-                return "Movimiento completado.";
+            if(Final->getCartaApuntada()== nullptr||(Inicio->getCartaApuntada()->getValor()==(Final->getCartaApuntada()->getValor()-1)&&Inicio->getCartaApuntada()->getColor()!=Final->getCartaApuntada()->getColor())){
+                if(Final->getCartaApuntada()== nullptr){
+                        CartaN = obtenerCartaNodo(inicio);
+                        Final->setCartaApuntada(CartaN);
+                        return "Movimiento completado.";
+                }else{
+                        CartaN = obtenerCartaNodo(inicio);
+                        NodoCarta* nuevo = new NodoCarta();
+                        nuevo->setCartaApuntada(CartaN);
+                        AgregarNodoDoble(obtenerNodo(final),nuevo);
+                    return "Movimiento completado.";
+                }
             }else{
                 return "Movimiento invalido, haber estudiado";
             }
         default:
             return "Alguna casilla marcada no existe, revise el tablero bien.";
     }
+}
+//metodo de apoyo del metodo de apoyo para obtener el nodo al cual quiere acceder el usuario
+Carta * Manejador::obtenerCartaNodo(int numero){
+    Carta* enviado = nullptr;
+    NodoCarta* ultimoNodo,*NodoActual = new NodoCarta();
+    switch (numero) {
+        case 1:
+            enviado = Cola1.getCartaApuntada();
+            Cola1 = *Cola1.getNodoSig();
+            return enviado;
+        case 2:
+            ultimoNodo = RecorrerNodo(&Ganar1);
+            NodoActual = &Ganar1;
+            break;
+        case 3:
+            ultimoNodo = RecorrerNodo(&Ganar2);
+            NodoActual = &Ganar2;
+            break;
+        case 4:
+            ultimoNodo = RecorrerNodo(&Ganar3);
+            NodoActual = &Ganar3;
+            break;
+        case 5:
+            ultimoNodo = RecorrerNodo(&Ganar4);
+            NodoActual = &Ganar4;
+            break;
+        case 6:
+            ultimoNodo = RecorrerNodo(&Col1);
+            NodoActual = &Col1;
+            break;
+        case 7:
+            ultimoNodo = RecorrerNodo(&Col2);
+            NodoActual = &Col2;
+            break;
+        case 8:
+            ultimoNodo = RecorrerNodo(&Col3);
+            NodoActual = &Col3;
+            break;
+        case 9:
+            ultimoNodo = RecorrerNodo(&Col4);
+            NodoActual = &Col4;
+            break;
+        case 10:
+            ultimoNodo = RecorrerNodo(&Col5);
+            NodoActual = &Col5;
+            break;
+        case 11:
+            ultimoNodo = RecorrerNodo(&Col6);
+            NodoActual = &Col6;
+            break;
+        case 12:
+            ultimoNodo = RecorrerNodo(&Col7);
+            NodoActual = &Col7;
+            break;
+        default:
+            break;
+    }
+    if (ultimoNodo) {
+        enviado = ultimoNodo->getCartaApuntada();
+        // Verificar si hay solo un nodo en la lista
+        if (ultimoNodo->getNodoAnterior() == nullptr) {
+            // La lista solo tiene un nodo, eliminarlo
+            delete ultimoNodo;
+            NodoActual->setCartaApuntada(nullptr); // Actualizar el puntero inicial de la lista
+        } else {
+            // La lista tiene más de un nodo, eliminar el último nodo
+            NodoCarta* nodoAnterior = ultimoNodo->getNodoAnterior();
+            nodoAnterior->setNodoSig(nullptr);
+            nodoAnterior->getCartaApuntada()->setOcultar(false);
+            ultimoNodo->setNodoAnterior(nullptr);
+            delete ultimoNodo;
+        }
+
+    }
+    return enviado;
 }
 //metodo de apoyo del metodo de apoyo para obtener el nodo al cual quiere acceder el usuario
 NodoCarta* Manejador::obtenerNodo(int numero){
