@@ -185,7 +185,7 @@ void Manejador::Jugar(int Opcion){
                     }
                     RecorrerNodo(aux->getNodoI())->getCartaApuntada()->setOcultar(true);
                     AgregarNodoDoble(RecorrerNodo(aux->getNodoI()),Nuevo);
-                    std::cout << "NValiendo tula"<<std::endl;
+                    std::cout << "Movimiento Completado!"<<std::endl;
                 }
             }else{
                 std::cout << "No tienes movimientos previos"<<std::endl;
