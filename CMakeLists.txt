@@ -10,4 +10,6 @@ add_executable(solitario main.cpp
         Manejador.h
         NodoCarta.cpp
         NodoCarta.h
+        Movimiento.cpp
+        Movimiento.h
 )

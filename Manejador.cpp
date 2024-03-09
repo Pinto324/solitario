@@ -77,24 +77,29 @@ void Manejador::PonerCartasTablero(){
     EspacioMemoria = asignarCol(&Col6, 6, EspacioMemoria, tab);
     asignarCol(&Col7, 7, EspacioMemoria, tab);
     AsignarCola(&Cola1, bar);
+    Mov.setCartaMovida(nullptr);
     IniciarJuego();
 }
 //tercer metodo principal
 void Manejador::IniciarJuego(){
-    int opcion;
     bool Sigue = true;
     std::cout << "-------------------------------Bienvenido a Solitario---------------------" << std::endl;
     while (Sigue){
+        int opcion;
         ImprimirPantalla();
         std::cout << "1) cambiar carta del top" << std::endl;
         std::cout << "2) Mover alguna carta" << std::endl;
-        std::cout << "3) Suicidarse :)" << std::endl;
-        std::cout << "4) Adelantar Movimiento" << std::endl;
+        std::cout << "3) Regresar (Muerte)" << std::endl;
+        std::cout << "4) Ver Carta" << std::endl;
         std::cout << "5) Finalizar juego" << std::endl;
         std::cout << "Que desea hacer?";
         std::cin >> opcion;
-        Jugar(opcion);
-        Sigue = ComprobarVictory();
+        if(opcion==5){
+            Sigue = false;
+        }else{
+            Jugar(opcion);
+            Sigue = ComprobarVictory();
+        }
     }
     if(!ComprobarVictory()){
         std::cout << "Felicidades, has ganado el solitario!!";
@@ -104,13 +109,23 @@ void Manejador::IniciarJuego(){
 }
 //cuarto metodo principal
 void Manejador::Jugar(int Opcion){
+    Movimiento *aux= new Movimiento();
+    int casillaI, casillaF;
     switch (Opcion) {
         case 1:
             if(Cola1.getNodoSig() == nullptr){
+                aux->setCartaMovida(Cola1.getCartaApuntada());
+                aux->setNodoI(&Cola2);
+                aux->setNodoF(&Cola1);
+                AgregarNodoDobleMov(&Mov,aux);
                 Cola1 = Cola2;
                 Cola1.getCartaApuntada()->setOcultar(false);
                 Cola2 = *new NodoCarta();
             }else{
+                aux->setCartaMovida(Cola1.getCartaApuntada());
+                aux->setNodoI(&Cola1);
+                aux->setNodoF(&Cola2);
+                AgregarNodoDobleMov(&Mov,aux);
                 if(Cola2.getCartaApuntada() == nullptr){
                     Cola2.setCartaApuntada(Cola1.getCartaApuntada());
                     Cola2.getCartaApuntada()->setOcultar(true);
@@ -123,7 +138,6 @@ void Manejador::Jugar(int Opcion){
             }
             break;
         case 2:
-            int casillaI, casillaF;
             std::cout << "Escriba el numero de casilla donde se encuentra la carta";
             std::cin >> casillaI;
             std::cout << "Escriba el numero de casilla donde quiere mover la carta";
@@ -139,6 +153,54 @@ void Manejador::Jugar(int Opcion){
             }
             break;
         case 3:
+            if(Mov.getNodoSiguiente()!= nullptr){
+                Movimiento* aux = RecorrerNodoMov(&Mov);
+                NodoCarta *Nuevo= new NodoCarta;
+                NodoCarta *ultimoNodo = new NodoCarta;
+                if(aux->getNodoI()==&Cola1 && aux->getNodoF()==&Cola2){
+                    Nuevo->setCartaApuntada(RecorrerNodo(&Cola2)->getCartaApuntada());
+                    Nuevo->getCartaApuntada()->setOcultar(false);
+                    Nuevo->setNodoSig(&Cola1);
+                    Cola1.setNodoAnterior(Nuevo);
+                    Cola1 = *Cola1.getNodoAnterior();
+                }else if(aux->getNodoI()==&Cola2 && aux->getNodoF()==&Cola1){
+
+                }else{
+                    ultimoNodo= RecorrerNodo(aux->getNodoF());
+                    if (ultimoNodo) {
+                        Nuevo->setCartaApuntada(ultimoNodo->getCartaApuntada());
+                        // Verificar si hay solo un nodo en la lista
+                        if (ultimoNodo->getNodoAnterior() == nullptr) {
+                            // La lista solo tiene un nodo, eliminarlo
+                            aux->getNodoF()->setCartaApuntada(nullptr); // Actualizar el puntero inicial de la lista
+                        } else {
+                            // La lista tiene más de un nodo, eliminar el último nodo
+                            NodoCarta* nodoAnterior = ultimoNodo->getNodoAnterior();
+                            nodoAnterior->setNodoSig(nullptr);
+                            nodoAnterior->getCartaApuntada()->setOcultar(false);
+                            ultimoNodo->setNodoAnterior(nullptr);
+
+                        }
+
+                    }
+                    RecorrerNodo(aux->getNodoI())->getCartaApuntada()->setOcultar(true);
+                    AgregarNodoDoble(RecorrerNodo(aux->getNodoI()),Nuevo);
+                    std::cout << "NValiendo tula"<<std::endl;
+                }
+            }else{
+                std::cout << "No tienes movimientos previos"<<std::endl;
+            }
+            break;
+        case 4:
+            std::cout << "Escriba el numero de casilla donde se encuentra la carta en el tablero";
+            std::cin >> casillaI;
+            std::cout << "Escriba el numero de Fila de la carta que quieras ver";
+            std::cin >> casillaF;
+            if(casillaI>=6&&casillaI<=12&&casillaF>0){
+                VerCartas(casillaI,casillaF);
+            }else{
+                std::cout << "Escoje un valor valido en las opciones"<<std::endl;
+            }
             break;
         default:
 
@@ -163,7 +225,7 @@ bool Manejador::ComprobarVictory(){
 }
 //metodo auxiliar del tercer principal para imprimir pantalla
 void Manejador::ImprimirPantalla(){
-    std::cout << "     1                          2      3      4     5" << std::endl;
+    std::cout << "     1                         2       3       4       5" << std::endl;
     NodoCarta *Mc1 = &Col1, *Mc2 = &Col2, *Mc3 = &Col3, *Mc4 = &Col4, *Mc5 = &Col5, *Mc6 = &Col6, *Mc7 = &Col7;
     bool Sigue = true;
 
@@ -210,11 +272,57 @@ void Manejador::ImprimirPantalla(){
     }
     std::cout << "  6           7         8         9          10         11         12" << std::endl;
 }
+//metodo para ver cartas que haya dicho el usuario
+void Manejador::VerCartas(int casilla, int repes){
+    NodoCarta *Inicio = obtenerNodoMov(casilla);
+    bool llave = false;
+    for (int i = 0; i < repes-1; ++i) {
+        if(Inicio->getNodoSig()!= nullptr){
+            Inicio = Inicio->getNodoSig();
+        }else{
+            llave = true;
+        }
+    }
+    bool VIa = Inicio->getNodoAnterior()->getCartaApuntada()->getOcultar();
+    bool VDa = Inicio->getNodoSig()->getCartaApuntada()->getOcultar();
+    if(llave){
+        std::cout << "Te pasaste de las cartas en la fila"<<std::endl;
+    }else{
+        std::string c;
+        if(Inicio->getNodoSig()== nullptr&&Inicio->getNodoAnterior()== nullptr){
+            std::cout << "Solo hay una carta en esta columna!"<<std::endl;
+        }else if(Inicio->getNodoSig()== nullptr){
+
+            Inicio->getNodoAnterior()->getCartaApuntada()->setOcultar(false);
+            ImprimirPantalla();
+            Inicio->getNodoAnterior()->getCartaApuntada()->setOcultar(VIa);
+            std::cout << "Mande cualquier valor para continuar  ";
+            std::cin >> c;
+        }else if(Inicio->getNodoAnterior()== nullptr){
+            Inicio->getNodoSig()->getCartaApuntada()->setOcultar(false);
+            ImprimirPantalla();
+            Inicio->getNodoSig()->getCartaApuntada()->setOcultar(VDa);
+            std::cout << "Mande cualquier valor para continuar ";
+            std::cin >> c;
+        }else{
+            Inicio->getNodoAnterior()->getCartaApuntada()->setOcultar(false);
+            Inicio->getNodoSig()->getCartaApuntada()->setOcultar(false);
+            ImprimirPantalla();
+            Inicio->getNodoAnterior()->getCartaApuntada()->setOcultar(VIa);
+            Inicio->getNodoAnterior()->getCartaApuntada()->setOcultar(VDa);
+            std::cout << "Mande cualquier valor para continuar ";
+            std::cin >> c;
+
+        }
+    }
+}
 //metodo de apoyo del cuarto metodo principal encargado de verificar si se puede asignar una carta al punto puesto
 std::string Manejador::movimientoLegal(int inicio, int final){
     NodoCarta *Inicio = obtenerNodo(inicio);
     NodoCarta *Final = obtenerNodo(final);
-    Carta * CartaN = new Carta();
+    NodoCarta* auxI = obtenerNodoMov(inicio);
+    auto *aux = new Movimiento();
+    auto * CartaN = new Carta();
     switch (final) {
         case 1:
             return "No puedes poner devuelta una carta en la baraja.";
@@ -227,6 +335,10 @@ std::string Manejador::movimientoLegal(int inicio, int final){
                 if (Inicio->getCartaApuntada()->getValor() == 1) {
                     CartaN = obtenerCartaNodo(inicio);
                     Final->setCartaApuntada(CartaN);
+                    aux->setNodoI(auxI);
+                    aux->setNodoF(Final);
+                    aux->setCartaMovida(CartaN);
+                    AgregarNodoDobleMov(&Mov,aux);
                     return "Movimiento completado.";
                 } else {
                     return "Movimiento invalido, tienes que iniciar con un A para meter cartas aqui.";
@@ -237,6 +349,10 @@ std::string Manejador::movimientoLegal(int inicio, int final){
                     NodoCarta* nuevo = new NodoCarta();
                     nuevo->setCartaApuntada(CartaN);
                     AgregarNodoDoble(obtenerNodo(final),nuevo);
+                    aux->setNodoI((auxI));
+                    aux->setNodoF((Final));
+                    aux->setCartaMovida(CartaN);
+                    AgregarNodoDobleMov(&Mov,aux);
                     return "Movimiento completado.";
                 }else{
                     return "Movimiento invalido, haber estudiado";
@@ -254,12 +370,20 @@ std::string Manejador::movimientoLegal(int inicio, int final){
                 if(Final->getCartaApuntada()== nullptr){
                         CartaN = obtenerCartaNodo(inicio);
                         Final->setCartaApuntada(CartaN);
+                        aux->setNodoI((auxI));
+                        aux->setNodoF((Final));
+                        aux->setCartaMovida(CartaN);
+                        AgregarNodoDobleMov(&Mov,aux);
                         return "Movimiento completado.";
                 }else{
                         CartaN = obtenerCartaNodo(inicio);
                         NodoCarta* nuevo = new NodoCarta();
                         nuevo->setCartaApuntada(CartaN);
                         AgregarNodoDoble(obtenerNodo(final),nuevo);
+                        aux->setNodoI((auxI));
+                        aux->setNodoF((Final));
+                        aux->setCartaMovida(CartaN);
+                        AgregarNodoDobleMov(&Mov,aux);
                     return "Movimiento completado.";
                 }
             }else{
@@ -276,7 +400,11 @@ Carta * Manejador::obtenerCartaNodo(int numero){
     switch (numero) {
         case 1:
             enviado = Cola1.getCartaApuntada();
-            Cola1 = *Cola1.getNodoSig();
+            if(Cola1.getNodoSig()== nullptr){
+                Cola1.setCartaApuntada(nullptr);
+            }else{
+                Cola1 = *Cola1.getNodoSig();
+            }
             return enviado;
         case 2:
             ultimoNodo = RecorrerNodo(&Ganar1);
@@ -330,7 +458,6 @@ Carta * Manejador::obtenerCartaNodo(int numero){
         // Verificar si hay solo un nodo en la lista
         if (ultimoNodo->getNodoAnterior() == nullptr) {
             // La lista solo tiene un nodo, eliminarlo
-            delete ultimoNodo;
             NodoActual->setCartaApuntada(nullptr); // Actualizar el puntero inicial de la lista
         } else {
             // La lista tiene más de un nodo, eliminar el último nodo
@@ -375,6 +502,38 @@ NodoCarta* Manejador::obtenerNodo(int numero){
             break;
     }
 }
+//metodo de apoyo del metodo de apoyo para obtener el nodo al cual quiere acceder el usuario
+NodoCarta* Manejador::obtenerNodoMov(int numero){
+    switch (numero) {
+        case 1:
+            return &Cola1;
+        case 2:
+            return &Ganar1;
+        case 3:
+            return &Ganar2;
+        case 4:
+            return &Ganar3;
+        case 5:
+            return &Ganar4;
+        case 6:
+            return (&Col1);
+        case 7:
+            return (&Col2);
+        case 8:
+            return (&Col3);
+        case 9:
+            return (&Col4);
+        case 10:
+            return (&Col5);
+        case 11:
+            return (&Col6);
+        case 12:
+            return (&Col7);
+        default:
+            break;
+    }
+}
+
 //metodo de apoyo del metodo de apoyo para obtener el nodo al cual quiere acceder el usuario
 NodoCarta Manejador::GuardadorDeCambio(int numero){
     switch (numero) {
@@ -449,20 +608,32 @@ void Manejador::AgregarNodoDoble(NodoCarta* temp, NodoCarta* Nuevo){
     temp->setNodoSig(Nuevo);
     Nuevo->setNodoAnterior(temp);
 }
+void Manejador::AgregarNodoDobleMov(Movimiento* temp, Movimiento* Nuevo){
+    temp->setNodoSiguiente(Nuevo);
+    Nuevo->setNodoAnterior(temp);
+}
 void Manejador::AgregarNodo(NodoCarta* temp, NodoCarta* Nuevo){
     temp->setNodoSig(Nuevo);
 }
 void Manejador::EliminarNodoDoble(NodoCarta* Eliminado){
     if(Eliminado->getNodoSig()== nullptr){
-        NodoCarta *Borrar =Eliminado->getNodoAnterior();
+        Eliminado->getNodoAnterior()->setNodoSig(nullptr);
         Eliminado->setNodoAnterior(nullptr);
-        Borrar->setNodoSig(nullptr);
+        delete Eliminado;
     }
 }
 NodoCarta* Manejador::RecorrerNodo(NodoCarta* Centinela){
 
     while (Centinela->getNodoSig() != nullptr) {
         Centinela = Centinela->getNodoSig();
+    }
+
+    return Centinela;
+}
+Movimiento* Manejador::RecorrerNodoMov(Movimiento* Centinela){
+
+    while (Centinela->getNodoSiguiente() != nullptr) {
+        Centinela = Centinela->getNodoSiguiente();
     }
 
     return Centinela;

@@ -6,11 +6,14 @@
 #define SOLITARIO_MANEJADOR_H
 #include "Carta.h"
 #include "NodoCarta.h"
+#include "Movimiento.h"
+
 class Manejador {
     private:
         Carta* bar;
         Carta* tab;
         NodoCarta Col1, Col2, Col3, Col4, Col5, Col6, Col7, Cola1, Cola2, Ganar1, Ganar2, Ganar3, Ganar4;
+        Movimiento Mov;
     public:
         Manejador();
         void InsertarCartas(Carta*,Carta*);
@@ -45,6 +48,14 @@ class Manejador {
     NodoCarta GuardadorDeCambio(int numero);
 
     bool ComprobarVictory();
+
+    void AgregarNodoDobleMov(Movimiento *temp, Movimiento *Nuevo);
+
+    Movimiento *RecorrerNodoMov(Movimiento *Centinela);
+
+    NodoCarta *obtenerNodoMov(int numero);
+
+    void VerCartas(int casilla, int repes);
 };
 
 

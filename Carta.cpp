@@ -33,8 +33,16 @@ std::string Carta::getDatos() const{
     if(Ocultar){
         ss <<"  []  ";
     }else{
-        if(Valor>9){
-            ss <<" "<<Valor <<Prefijo << Color;
+        if(Valor==11){
+            ss <<" "<<"J"<<Prefijo << Color<<" ";
+        }else if(Valor==12){
+            ss <<" "<<"Q"<<Prefijo << Color<<" ";
+        }else if(Valor==13){
+            ss <<" "<<"K"<<Prefijo << Color<<" ";
+        }else if(Valor==1){
+            ss <<" "<<"A"<<Prefijo << Color<<" ";
+        }else if(Valor==10){
+            ss <<Valor<<Prefijo << Color<<" ";
         }else{
             ss<<" "<< Valor <<Prefijo << Color<<" ";
         }
